@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.testapplicationweather.databinding.ItemRecyclerViewBinding
 
 class PagerAdapter : RecyclerView.Adapter<PagerViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemRecyclerViewBinding.inflate(inflater, parent, false)
