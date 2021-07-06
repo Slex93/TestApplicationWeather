@@ -1,10 +1,8 @@
 package com.example.testapplicationweather.main.model
 
-import com.google.gson.annotations.SerializedName
-
 data class MainModel (
     val currently: CurrentlyModel,
-   // val daily: DailyModel,
+    val daily: DailyModel,
 )
 
 data class CurrentlyModel(
@@ -14,11 +12,11 @@ data class CurrentlyModel(
 )
 
 data class DailyModel(
-    val data: DataModel
+    val data: List<DataModel>
 )
 
 data class DataModel(
-    val day: List<DayModel>
+    val day: DayModel
 )
 data class DayModel(
     val temperatureHigh: String,

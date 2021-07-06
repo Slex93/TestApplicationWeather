@@ -16,6 +16,7 @@ import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.GET_MSK
 import com.example.testapplicationweather.utilites.GET_SPB
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import java.text.DecimalFormat
 
@@ -33,6 +34,9 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        mainViewModel.error.observe(viewLifecycleOwner){
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+        }
         initHead()
         initPager()
         return binding.root
