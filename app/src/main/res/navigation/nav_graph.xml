@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_map"
-        android:name="com.example.testapplicationweather.MapFragment"
+        android:name="com.example.testapplicationweather.map.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
 </navigation>

@@ -16,6 +16,7 @@ import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.GET_MSK
 import com.example.testapplicationweather.utilites.GET_SPB
+import com.example.testapplicationweather.utilites.refactorToCelsius
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -89,11 +90,4 @@ class MainFragment : Fragment() {
             adapter.setList(listOfDays)
         }
     }
-}
-
-private fun String.refactorToCelsius(): String {
-    val temp = (this.toFloat() - 32) * 5 / 9
-    val dec = DecimalFormat("#0.0")
-    val result = dec.format(temp).toString() + " \u2103"
-    return (result)
 }
