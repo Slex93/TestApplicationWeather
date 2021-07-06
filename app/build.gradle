@@ -38,6 +38,17 @@ android {
 }
 
 dependencies {
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
+    implementation 'androidx.activity:activity-ktx:1.2.3'
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
