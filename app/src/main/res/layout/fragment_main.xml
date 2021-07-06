@@ -30,7 +30,6 @@
                 android:id="@+id/main_fragment_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-1 \u2103"
                 style="@style/TextAppearance.MaterialComponents.Headline2"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/primary_padding"/>
@@ -40,7 +39,6 @@
             android:id="@+id/main_fragment_weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ОБЛАЧНО"
             style="@style/TextAppearance.MaterialComponents.Headline4"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/primary_padding"/>

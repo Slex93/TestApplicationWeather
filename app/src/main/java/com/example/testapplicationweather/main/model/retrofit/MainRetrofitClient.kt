@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-object FirstRetrofitClient {
+object MainRetrofitClient {
     private var retrofit: Retrofit? = null
 
     fun getClient(baseUrl: String): Retrofit {
@@ -18,6 +18,7 @@ object FirstRetrofitClient {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .build()
+
             retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .client(client)

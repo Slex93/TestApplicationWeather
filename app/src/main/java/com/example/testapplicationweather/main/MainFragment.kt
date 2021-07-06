@@ -5,17 +5,27 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMainBinding
+import com.example.testapplicationweather.main.model.MainRepository
+import com.example.testapplicationweather.main.viewmodel.MainViewModel
+import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
+import com.example.testapplicationweather.utilites.GET_MSK
+import com.example.testapplicationweather.utilites.GET_SPB
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlin.collections.Map as Map
+import java.text.DecimalFormat
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
+    private val repository = MainRepository()
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,6 +33,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        initHead()
         initPager()
         return binding.root
     }
@@ -46,10 +57,10 @@ class MainFragment : Fragment() {
                 super.onPageSelected(position)
                 when(position){
                     0 -> {
-                        Log.i("Pager:selected", "Selected moscow")
+                        mainViewModel.initRetrofit(GET_MSK)
                     }
                     1 -> {
-                        Log.i("Pager:selected", "Selected spb")
+                        mainViewModel.initRetrofit(GET_SPB)
                     }
                 }
             }
@@ -57,4 +68,19 @@ class MainFragment : Fragment() {
 
 
     }
+
+    private fun initHead() {
+        mainViewModel.weather.observe(this.requireActivity()){
+            val model = it.currently
+            binding.mainFragmentTemperature.text = model.temperature.refactorToCelsius()
+            binding.mainFragmentWeather.text = model.summary
+        }
+    }
+}
+
+private fun String.refactorToCelsius(): String {
+    val temp = (this.toFloat() - 32)*5/9
+    val dec = DecimalFormat("#0.0")
+    val result = dec.format(temp).toString() + " \u2103"
+    return (result)
 }
