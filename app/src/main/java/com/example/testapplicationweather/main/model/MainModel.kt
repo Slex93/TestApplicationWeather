@@ -1,7 +1,5 @@
 package com.example.testapplicationweather.main.model
 
-import com.google.gson.annotations.SerializedName
-
 data class MainModel (
     val currently: CurrentlyModel,
     val daily: DailyModel,

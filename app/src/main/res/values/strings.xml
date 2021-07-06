@@ -3,5 +3,7 @@
 
     <string name="spb_name">Санкт-Петербург</string>
     <string name="msk_name">Москва</string>
+    <string name="description_weather_icon">weather icon</string>
+    <string name="description_current_location">go to current location</string>
 
 </resources>

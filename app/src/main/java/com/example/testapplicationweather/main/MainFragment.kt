@@ -10,17 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMainBinding
-import com.example.testapplicationweather.main.model.DayModel
 import com.example.testapplicationweather.main.model.MainRepository
 import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
-import com.example.testapplicationweather.utilites.GET_MSK
-import com.example.testapplicationweather.utilites.GET_SPB
 import com.example.testapplicationweather.utilites.refactorToCelsius
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import java.text.DecimalFormat
 
 class MainFragment : Fragment() {
 

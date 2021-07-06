@@ -16,5 +16,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_location_searching_24"
         android:layout_margin="@dimen/primary_padding"
-        android:layout_gravity="bottom|end"/>
+        android:layout_gravity="bottom|end"
+        android:contentDescription="@string/description_current_location"/>
+
 </FrameLayout>
