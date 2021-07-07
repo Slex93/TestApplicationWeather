@@ -27,8 +27,7 @@ class PagerFragment(private val list: MutableLiveData<DailyModel>) : Fragment() 
     }
 
     private fun initRecyclerView() {
-        val adapter = PagerAdapter()
-        Log.i("WEATHER:PAGER", list.toString())
+        val adapter = PagerAdapter(this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         list.observe(viewLifecycleOwner){

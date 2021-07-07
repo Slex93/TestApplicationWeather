@@ -1,10 +1,13 @@
 package com.example.testapplicationweather.main
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +20,8 @@ import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.GET_MSK
 import com.example.testapplicationweather.utilites.GET_SPB
-import com.example.testapplicationweather.utilites.refactorToCelsius
+import com.example.testapplicationweather.utilites.convertToCelsius
+import com.example.testapplicationweather.utilites.setIcon
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -79,20 +83,14 @@ class MainFragment : Fragment() {
     }
 
     private fun initHead() {
-
-        var listOfData = MutableLiveData<DailyModel>()
-
         mainViewModel.weather.observe(this.requireActivity()) {
             val model = it.currently
-            binding.mainFragmentTemperature.text = model.temperature.refactorToCelsius()
+            binding.mainFragmentTemperature.text = model.temperature.convertToCelsius()
             binding.mainFragmentWeather.text = model.summary
-
+            this.setIcon(binding.mainFragmentIcon, model.icon)
             val listOfDays = it.daily
-
-            listOfData.value = listOfDays
-            Log.i("WEATHER:INIT", (listOfDays).toString())
-
             adapter.setList(listOfDays)
         }
     }
 }
+
