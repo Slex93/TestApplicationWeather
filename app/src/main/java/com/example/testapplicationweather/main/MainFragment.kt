@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMainBinding
+import com.example.testapplicationweather.main.model.DailyModel
 import com.example.testapplicationweather.main.model.MainRepository
 import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
+import com.example.testapplicationweather.utilites.GET_MSK
+import com.example.testapplicationweather.utilites.GET_SPB
 import com.example.testapplicationweather.utilites.refactorToCelsius
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -63,10 +67,10 @@ class MainFragment : Fragment() {
                 super.onPageSelected(position)
                 when (position) {
                     0 -> {
-                        //mainViewModel.initRetrofit(GET_MSK)
+                        mainViewModel.initRetrofit(GET_MSK)
                     }
                     1 -> {
-                        //mainViewModel.initRetrofit(GET_SPB)
+                        mainViewModel.initRetrofit(GET_SPB)
                     }
                 }
             }
@@ -75,12 +79,17 @@ class MainFragment : Fragment() {
     }
 
     private fun initHead() {
+
+        var listOfData = MutableLiveData<DailyModel>()
+
         mainViewModel.weather.observe(this.requireActivity()) {
             val model = it.currently
             binding.mainFragmentTemperature.text = model.temperature.refactorToCelsius()
             binding.mainFragmentWeather.text = model.summary
 
-            val listOfDays = it.daily.data
+            val listOfDays = it.daily
+
+            listOfData.value = listOfDays
             Log.i("WEATHER:INIT", (listOfDays).toString())
 
             adapter.setList(listOfDays)
