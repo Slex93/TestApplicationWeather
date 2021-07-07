@@ -36,3 +36,12 @@ fun Fragment.setIcon(iconView: ImageView, name: String) {
     }
     iconView.setImageDrawable(icon)
 }
+
+fun Fragment.getWeatherTitle(primaryName: String): String{
+    when(primaryName){
+        "Cloudy" -> return "Облачно"
+        "Clear" -> return "Ясно"
+        "Mostly Cloudy" -> return "Преимущественно облачно"
+        else -> return "Ясно"
+    }
+}

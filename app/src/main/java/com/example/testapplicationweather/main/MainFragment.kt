@@ -18,10 +18,7 @@ import com.example.testapplicationweather.main.model.DailyModel
 import com.example.testapplicationweather.main.model.MainRepository
 import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
-import com.example.testapplicationweather.utilites.GET_MSK
-import com.example.testapplicationweather.utilites.GET_SPB
-import com.example.testapplicationweather.utilites.convertToCelsius
-import com.example.testapplicationweather.utilites.setIcon
+import com.example.testapplicationweather.utilites.*
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -86,7 +83,7 @@ class MainFragment : Fragment() {
         mainViewModel.weather.observe(this.requireActivity()) {
             val model = it.currently
             binding.mainFragmentTemperature.text = model.temperature.convertToCelsius()
-            binding.mainFragmentWeather.text = model.summary
+            binding.mainFragmentWeather.text = getWeatherTitle(model.summary)
             this.setIcon(binding.mainFragmentIcon, model.icon)
             val listOfDays = it.daily
             adapter.setList(listOfDays)

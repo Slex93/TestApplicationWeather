@@ -9,12 +9,13 @@
 
     <LinearLayout
         android:id="@+id/main_head_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_horizontal"
         android:layout_margin="@dimen/primary_padding">
 
         <LinearLayout
@@ -43,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:textSize="20sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/primary_padding"/>
 
