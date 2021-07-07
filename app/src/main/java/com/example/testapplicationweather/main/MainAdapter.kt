@@ -7,15 +7,6 @@ import com.example.testapplicationweather.main.model.DailyModel
 import com.example.testapplicationweather.main.pager.PagerFragment
 
 class MainAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-
-    private var list = MutableLiveData<DailyModel>()
-
     override fun getItemCount(): Int = 2
-
-    override fun createFragment(position: Int): Fragment = PagerFragment(list)
-
-    fun setList(item: DailyModel) {
-        list.value = item
-    }
-
+    override fun createFragment(position: Int): Fragment = PagerFragment()
 }

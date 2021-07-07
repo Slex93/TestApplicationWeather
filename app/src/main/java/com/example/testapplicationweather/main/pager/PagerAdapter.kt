@@ -1,14 +1,12 @@
 package com.example.testapplicationweather.main.pager
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testapplicationweather.databinding.ItemRecyclerViewBinding
 import com.example.testapplicationweather.main.model.DayModel
 
-class PagerAdapter(private val fragment: Fragment) : RecyclerView.Adapter<PagerViewHolder>() {
+class PagerAdapter : RecyclerView.Adapter<PagerViewHolder>() {
 
     private var list = mutableListOf<DayModel>()
 
@@ -19,7 +17,7 @@ class PagerAdapter(private val fragment: Fragment) : RecyclerView.Adapter<PagerV
     }
 
     override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
-        holder.bind(list[position], fragment)
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int = list.size

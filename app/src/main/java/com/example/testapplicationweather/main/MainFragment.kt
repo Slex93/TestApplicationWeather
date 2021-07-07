@@ -1,37 +1,38 @@
 package com.example.testapplicationweather.main
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMainBinding
-import com.example.testapplicationweather.main.model.DailyModel
 import com.example.testapplicationweather.main.model.MainRepository
+import com.example.testapplicationweather.main.pager.PagerSharedViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.*
+import com.example.testapplicationweather.utilites.Resources.setIconsAndTitles
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    private lateinit var adapter: MainAdapter
-    private lateinit var tab: TabLayout.Tab
+    private lateinit var viewPager: ViewPager2
 
     private val repository = MainRepository()
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
+    }
+    private val sharedViewModel: PagerSharedViewModel by activityViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setIconsAndTitles()
     }
 
     override fun onCreateView(
@@ -49,20 +50,20 @@ class MainFragment : Fragment() {
     }
 
     private fun initPager() {
-        val msk = getString(R.string.msk_name)
-        val spb = getString(R.string.spb_name)
-        val mapOfCity = mapOf(0 to msk, 1 to spb)
+        viewPager = binding.mainViewPager
+        viewPager.adapter = MainAdapter(this)
 
-        adapter = MainAdapter(this)
-        val viewPager = binding.mainViewPager
+        val mapOfCity = mapOf(0 to getString(R.string.msk_name), 1 to getString(R.string.spb_name))
 
-        viewPager.adapter = adapter
         TabLayoutMediator(binding.mainTabLayout, binding.mainViewPager) { tab, position ->
-            this.tab = tab
             tab.text = mapOfCity[position]
             binding.mainViewPager.setCurrentItem(tab.position, true)
         }.attach()
 
+        setChangePagerListener()
+    }
+
+    private fun setChangePagerListener() {
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -76,7 +77,6 @@ class MainFragment : Fragment() {
                 }
             }
         })
-
     }
 
     private fun initHead() {
@@ -84,9 +84,9 @@ class MainFragment : Fragment() {
             val model = it.currently
             binding.mainFragmentTemperature.text = model.temperature.convertToCelsius()
             binding.mainFragmentWeather.text = getWeatherTitle(model.summary)
-            this.setIcon(binding.mainFragmentIcon, model.icon)
+            binding.mainFragmentIcon.setIcon(model.icon)
             val listOfDays = it.daily
-            adapter.setList(listOfDays)
+            sharedViewModel.listOfDays.value = listOfDays
         }
     }
 }
