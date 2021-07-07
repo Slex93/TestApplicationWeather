@@ -26,7 +26,7 @@ class MainRepository {
                     call: Call<MainModel>,
                     response: Response<MainModel>
                 ) {
-                    if (response.isSuccessful){
+                    if (response.isSuccessful) {
                         listOfWeather.value = response.body()?.copy() as MainModel
 
                     } else {

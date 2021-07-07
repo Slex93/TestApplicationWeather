@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.example.testapplicationweather.utilites.Resources.iconClear
 import com.example.testapplicationweather.utilites.Resources.iconCloud
+import com.example.testapplicationweather.utilites.Resources.stringClear
 import com.example.testapplicationweather.utilites.Resources.titleClear
 import com.example.testapplicationweather.utilites.Resources.titleCloud
 import java.text.DecimalFormat
@@ -28,13 +29,13 @@ fun String.convertToTime(): String {
 }
 
 fun ImageView.setIcon(name: String) {
-    val icon: Drawable? = if (name.contains("clear")) {
+    val icon: Drawable? = if (name.contains(stringClear)) {
         iconClear
     } else iconCloud
     this.setImageDrawable(icon)
 }
 
 fun getWeatherTitle(primaryName: String): String =
-    if (primaryName.contains("Clear")){
+    if (primaryName.lowercase().contains(stringClear)) {
         titleClear
     } else titleCloud

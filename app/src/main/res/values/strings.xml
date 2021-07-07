@@ -7,5 +7,6 @@
     <string name="description_current_location">go to current location</string>
     <string name="title_clear">ЯСНО</string>
     <string name="title_cloud">ОБЛАЧНО</string>
-
+    <string name="string_clear">clear</string>
+    <string name="string_cloud">cloud</string>
 </resources>
