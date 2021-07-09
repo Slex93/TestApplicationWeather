@@ -33,7 +33,6 @@ class MainRepository {
                     } else {
                         error.value = response.message()
                     }
-
                 }
 
                 override fun onFailure(call: Call<MainModel>, t: Throwable) {

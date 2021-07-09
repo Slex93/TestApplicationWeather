@@ -23,12 +23,13 @@ object MainRetrofitClient {
         if (retrofit == null) {
             val cacheSize = (10 * 1024 * 1024).toLong()
             val cache = Cache(cacheDirectory, cacheSize)
-            /*val mLoggingInterceptor = HttpLoggingInterceptor()
-            mLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY*/
+            val mLoggingInterceptor = HttpLoggingInterceptor()
+            mLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             val client = OkHttpClient.Builder()
                 .addInterceptor(offlineInterceptor)
                 .addNetworkInterceptor(onlineInterceptor)
+                .addInterceptor(mLoggingInterceptor)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .cache(cache)
