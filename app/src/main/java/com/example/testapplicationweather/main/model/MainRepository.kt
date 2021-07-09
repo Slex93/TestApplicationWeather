@@ -11,12 +11,14 @@ import retrofit2.Response
 class MainRepository {
 
     private val firstRetrofitService: MainRetrofitServices
-        get() = MainRetrofitClient.getClient(BASE_URL)
+        get() = MainRetrofitClient.getClient(BASE_URL, internet)
             .create(MainRetrofitServices::class.java)
 
     val listOfWeather = MutableLiveData<MainModel>()
 
     val error = MutableLiveData<String>()
+
+    val internet: Boolean = false
 
     fun initRetrofit(coordinates: String) {
         val mService = firstRetrofitService
