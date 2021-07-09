@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,11 +15,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMainBinding
 import com.example.testapplicationweather.main.model.MainRepository
-import com.example.testapplicationweather.main.model.retrofit.MainRetrofitServices
 import com.example.testapplicationweather.main.pager.PagerSharedViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.*
+import com.example.testapplicationweather.utilites.Resources.internetConnection
 import com.example.testapplicationweather.utilites.Resources.setIconsAndTitles
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,11 +29,11 @@ class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     private lateinit var viewPager: ViewPager2
-
     private val repository = MainRepository()
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
     }
+
     private val sharedViewModel: PagerSharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,11 +75,11 @@ class MainFragment : Fragment() {
                 super.onPageSelected(position)
                 when (position) {
                     0 -> {
-                        mainViewModel.internet = isNetworkConnected()
+                        internetConnection = isNetworkConnected()
                         mainViewModel.initRetrofit(GET_MSK)
                     }
                     1 -> {
-                        mainViewModel.internet = isNetworkConnected()
+                        internetConnection = isNetworkConnected()
                         mainViewModel.initRetrofit(GET_SPB)
                     }
                 }

@@ -7,18 +7,17 @@ import com.example.testapplicationweather.utilites.BASE_URL
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class MainRepository {
 
     private val firstRetrofitService: MainRetrofitServices
-        get() = MainRetrofitClient.getClient(BASE_URL, internet)
+        get() = MainRetrofitClient.getClient(BASE_URL)
             .create(MainRetrofitServices::class.java)
 
     val listOfWeather = MutableLiveData<MainModel>()
 
     val error = MutableLiveData<String>()
-
-    val internet: Boolean = false
 
     fun initRetrofit(coordinates: String) {
         val mService = firstRetrofitService
