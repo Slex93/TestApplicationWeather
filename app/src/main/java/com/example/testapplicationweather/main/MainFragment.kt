@@ -2,9 +2,8 @@ package com.example.testapplicationweather.main
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +22,6 @@ import com.example.testapplicationweather.utilites.Resources.internetConnection
 import com.example.testapplicationweather.utilites.Resources.setIconsAndTitles
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-
 
 class MainFragment : Fragment() {
 
