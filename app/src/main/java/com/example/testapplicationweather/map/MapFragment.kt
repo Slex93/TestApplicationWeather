@@ -2,10 +2,8 @@ package com.example.testapplicationweather.map
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.telephony.CarrierConfigManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,12 +16,15 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var binding: FragmentMapBinding
     private lateinit var mapView: MapView
     private lateinit var map: GoogleMap
+    private var markerLocation: Marker? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,12 +50,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun checkPermissionOfFragment() {
         when (PackageManager.PERMISSION_GRANTED) {
-            ContextCompat.checkSelfPermission(requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION) -> {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) -> {
                 updateUI()
             }
             else -> {
-                requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_CODE
+                )
             }
         }
     }
@@ -66,13 +72,14 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ) {
         Log.i("Permission:", "request")
 
-        when(requestCode){
+        when (requestCode) {
             REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
                     Log.i("Permission:", "apply")
                     updateUI()
-                    binding.mapLocation.setOnClickListener { updateUI() }
+
                 } else {
                     Log.i("Permission:", "deny")
                     return
@@ -86,9 +93,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun updateUI() {
         Log.i("Permission:", "updateUI")
-        val lm = requireActivity().applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        setLocation()
+        binding.mapLocation.setOnClickListener {
+            Log.i("Permission:", "click")
+            updateUI()
+        }
+    }
+
+    private fun setLocation(){
+        val lm =
+            requireActivity().applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        if (l != null){
+        if (l != null) {
             val latitude = l.latitude
             val longtitude = l.longitude
             val location = LatLng(latitude, longtitude)
@@ -96,8 +112,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setFocus(location: LatLng){
-        val zoom = 30
+    private fun setFocus(location: LatLng) {
+        val zoom = 15
         map.moveCamera(
             CameraUpdateFactory.newLatLngZoom(
                 LatLng(
@@ -106,9 +122,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 ), zoom.toFloat()
             )
         )
+        if(markerLocation != null) markerLocation?.remove()
+        markerLocation = map.addMarker(
+            MarkerOptions()
+                .position(location)
+                .title("you")
+        )
     }
 
-    companion object{
+    companion object {
         const val REQUEST_CODE = 1
     }
 
