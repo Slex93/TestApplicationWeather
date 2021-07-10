@@ -11,7 +11,7 @@ import java.io.File
 
 class MainRepository {
 
-    private val firstRetrofitService: MainRetrofitServices
+    private val retrofitService: MainRetrofitServices
         get() = MainRetrofitClient.getClient(BASE_URL)
             .create(MainRetrofitServices::class.java)
 
@@ -20,7 +20,7 @@ class MainRepository {
     val error = MutableLiveData<String>()
 
     fun initRetrofit(coordinates: String) {
-        val mService = firstRetrofitService
+        val mService = retrofitService
         mService.getMovie(coordinates)
             .enqueue(object : Callback<MainModel> {
                 override fun onResponse(

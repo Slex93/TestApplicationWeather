@@ -1,8 +1,5 @@
 package com.example.testapplicationweather.main.model.retrofit
 
-import android.content.Context
-import android.net.ConnectivityManager
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.testapplicationweather.utilites.Resources.cacheDirectory
 import com.example.testapplicationweather.utilites.Resources.internetConnection
 import okhttp3.Cache
@@ -12,7 +9,6 @@ import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 
@@ -44,7 +40,7 @@ object MainRetrofitClient {
         return retrofit!!
     }
 
-    var onlineInterceptor = Interceptor { chain ->
+    private var onlineInterceptor = Interceptor { chain ->
         val response = chain.proceed(chain.request())
         val maxAge = 60 * 60 * 3
         response.newBuilder()
@@ -53,7 +49,7 @@ object MainRetrofitClient {
             .build()
     }
 
-    var offlineInterceptor = Interceptor { chain ->
+    private var offlineInterceptor = Interceptor { chain ->
         var request: Request = chain.request()
         if (!internetConnection) {
             val maxStale = 60 * 60 * 3

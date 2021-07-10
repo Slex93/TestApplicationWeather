@@ -7,6 +7,7 @@ import com.example.testapplicationweather.utilites.Resources.iconCloud
 import com.example.testapplicationweather.utilites.Resources.stringClear
 import com.example.testapplicationweather.utilites.Resources.titleClear
 import com.example.testapplicationweather.utilites.Resources.titleCloud
+import com.google.android.gms.maps.model.LatLng
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,3 +40,10 @@ fun getWeatherTitle(primaryName: String): String =
     if (primaryName.lowercase().contains(stringClear)) {
         titleClear
     } else titleCloud
+
+fun LatLng.getCoordinates():String {
+    val dec = DecimalFormat("#0.00000")
+    val lat = dec.format(latitude).toString()
+    val long = dec.format(longitude).toString()
+    return "$lat, $long"
+}

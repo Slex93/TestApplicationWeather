@@ -48,6 +48,7 @@ class MainFragment : Fragment() {
         mainViewModel.error.observe(viewLifecycleOwner) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
         }
+        binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.VISIBLE
         initPager()
         initHead()
         return binding.root
@@ -88,9 +89,10 @@ class MainFragment : Fragment() {
     private fun initHead() {
         mainViewModel.weather.observe(this.requireActivity()) {
             val model = it.currently
-            binding.mainFragmentTemperature.text = model.temperature.convertToCelsius()
-            binding.mainFragmentWeather.text = getWeatherTitle(model.summary)
-            binding.mainFragmentIcon.setIcon(model.icon)
+            binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
+            binding.mainHeadLayoutInclude.mainFragmentTemperature.text = model.temperature.convertToCelsius()
+            binding.mainHeadLayoutInclude.mainFragmentWeather.text = getWeatherTitle(model.summary)
+            binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
             val listOfDays = it.daily
             sharedViewModel.listOfDays.value = listOfDays
         }

@@ -9,4 +9,6 @@
     <string name="title_cloud">ОБЛАЧНО</string>
     <string name="string_clear">clear</string>
     <string name="string_cloud">cloud</string>
+    <string name="weather">ПОГОДА</string>
+
 </resources>
