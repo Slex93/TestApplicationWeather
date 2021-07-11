@@ -15,8 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center_horizontal"
-        android:layout_margin="@dimen/primary_padding"/>
+        android:gravity="center_horizontal"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/main_tab_layout"

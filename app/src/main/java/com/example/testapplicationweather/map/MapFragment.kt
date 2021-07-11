@@ -198,7 +198,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     override fun onLocationChanged(location: Location) {
         setFocus(LatLng(location.latitude, location.longitude))
-        locationManager.removeUpdates(this);
+        locationManager.removeUpdates(this)
     }
 
 }
