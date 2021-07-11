@@ -161,6 +161,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     }
 
     private fun setLocation() {
+        binding.mapProgress.visibility = View.VISIBLE
         locationManager =
             requireActivity().applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
@@ -170,7 +171,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
             val longtitude = location.longitude
             setFocus(LatLng(latitude, longtitude))
         } else {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, this)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10f, this)
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 10f, this)
         }
     }
 
@@ -190,6 +192,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
                 .position(location)
                 .title("you")
         )
+        binding.mapProgress.visibility = View.GONE
     }
 
     companion object {
