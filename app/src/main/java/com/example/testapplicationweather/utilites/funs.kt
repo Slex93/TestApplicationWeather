@@ -2,6 +2,9 @@ package com.example.testapplicationweather.utilites
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
+import com.example.testapplicationweather.R
 import com.example.testapplicationweather.utilites.Resources.iconClear
 import com.example.testapplicationweather.utilites.Resources.iconCloud
 import com.example.testapplicationweather.utilites.Resources.stringClear
@@ -46,4 +49,17 @@ fun LatLng.getCoordinates():String {
     val lat = dec.format(latitude).toString()
     val long = dec.format(longitude).toString()
     return "$lat, $long"
+}
+
+fun Fragment.setIconsAndTitles() {
+    val theme = this.activity?.theme
+    iconClear =
+        ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_wb_sunny_24, theme)
+    iconCloud =
+        ResourcesCompat.getDrawable(resources, R.drawable.ic_outline_wb_cloudy_24, theme)
+    titleClear = getString(R.string.title_clear)
+    titleCloud = getString(R.string.title_cloud)
+    stringClear = getString(R.string.string_clear)
+    Resources.stringCloud = getString(R.string.string_cloud)
+    Resources.cacheDirectory = requireContext().cacheDir
 }

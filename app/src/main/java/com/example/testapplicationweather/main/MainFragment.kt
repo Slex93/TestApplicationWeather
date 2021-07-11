@@ -2,7 +2,6 @@ package com.example.testapplicationweather.main
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,6 @@ import com.example.testapplicationweather.main.viewmodel.MainViewModel
 import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.*
 import com.example.testapplicationweather.utilites.Resources.internetConnection
-import com.example.testapplicationweather.utilites.Resources.setIconsAndTitles
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -90,7 +88,8 @@ class MainFragment : Fragment() {
         mainViewModel.weather.observe(this.requireActivity()) {
             val model = it.currently
             binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
-            binding.mainHeadLayoutInclude.mainFragmentTemperature.text = model.temperature.convertToCelsius()
+            binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
+                model.temperature.convertToCelsius()
             binding.mainHeadLayoutInclude.mainFragmentWeather.text = getWeatherTitle(model.summary)
             binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
             val listOfDays = it.daily

@@ -3,8 +3,11 @@ package com.example.testapplicationweather.map
 import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +24,7 @@ import com.example.testapplicationweather.utilites.convertToCelsius
 import com.example.testapplicationweather.utilites.getCoordinates
 import com.example.testapplicationweather.utilites.getWeatherTitle
 import com.example.testapplicationweather.utilites.setIcon
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -29,14 +33,17 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
+import java.util.concurrent.Executor
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     private lateinit var binding: FragmentMapBinding
     private lateinit var mapView: MapView
     private lateinit var map: GoogleMap
     private var markerLocation: Marker? = null
     private var markerCurrentWeather: Marker? = null
+    private lateinit var locationManager: LocationManager
 
     private val repository = MapRepository()
     private val viewModel: MapViewModel by viewModels {
@@ -147,7 +154,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
         dialog.show()
         dialog.setOnCancelListener {
-            Snackbar.make(binding.root, "CANCELED", Snackbar.LENGTH_SHORT).show()
             bindingHead.headerCloseIcon.visibility = View.GONE
             bindingHead.headerProgressBar.visibility = View.GONE
             viewModel.currentWeather.removeObservers(viewLifecycleOwner)
@@ -155,14 +161,16 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setLocation() {
-        val lm =
+        locationManager =
             requireActivity().applicationContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        if (l != null) {
-            val latitude = l.latitude
-            val longtitude = l.longitude
-            val location = LatLng(latitude, longtitude)
-            setFocus(location)
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        val time = Calendar.getInstance().timeInMillis - 2 * 60 * 1000
+        if (location != null && location.time >= time) {
+            val latitude = location.latitude
+            val longtitude = location.longitude
+            setFocus(LatLng(latitude, longtitude))
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, this)
         }
     }
 
@@ -186,6 +194,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
         const val REQUEST_CODE = 1
+    }
+
+    override fun onLocationChanged(location: Location) {
+        setFocus(LatLng(location.latitude, location.longitude))
+        locationManager.removeUpdates(this);
     }
 
 }

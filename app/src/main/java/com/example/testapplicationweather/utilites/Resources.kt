@@ -19,17 +19,4 @@ object Resources {
     var cacheDirectory: File? = null
     var internetConnection:Boolean = false
 
-    fun Fragment.setIconsAndTitles() {
-        val theme = this.activity?.theme
-        iconClear =
-            ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_wb_sunny_24, theme)
-        iconCloud =
-            ResourcesCompat.getDrawable(resources, R.drawable.ic_outline_wb_cloudy_24, theme)
-        titleClear = getString(R.string.title_clear)
-        titleCloud = getString(R.string.title_cloud)
-        stringClear = getString(R.string.string_clear)
-        stringCloud = getString(R.string.string_cloud)
-        cacheDirectory = requireContext().cacheDir
-    }
-
 }
