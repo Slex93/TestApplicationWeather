@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
+import com.example.testapplicationweather.databinding.ActivityMainBinding
 import com.example.testapplicationweather.databinding.FragmentMainBinding
 import com.example.testapplicationweather.main.model.MainRepository
 import com.example.testapplicationweather.main.pager.PagerSharedViewModel
@@ -23,7 +24,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MainFragment : Fragment() {
 
-    private lateinit var binding: FragmentMainBinding
+    private var _binding: FragmentMainBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var viewPager: ViewPager2
     private val repository = MainRepository()
     private val mainViewModel: MainViewModel by viewModels {
@@ -42,7 +45,7 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentMainBinding.inflate(inflater, container, false)
         mainViewModel.error.observe(viewLifecycleOwner) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
         }
@@ -102,6 +105,11 @@ class MainFragment : Fragment() {
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = connectivityManager.activeNetworkInfo
         return activeNetwork?.isConnected == true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
 

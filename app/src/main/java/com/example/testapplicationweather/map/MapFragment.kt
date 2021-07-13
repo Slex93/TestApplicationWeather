@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.testapplicationweather.R
+import com.example.testapplicationweather.databinding.FragmentMainBinding
 import com.example.testapplicationweather.databinding.FragmentMapBinding
 import com.example.testapplicationweather.databinding.HeadWeatherBinding
 import com.example.testapplicationweather.map.model.MapRepository
@@ -38,7 +39,12 @@ import java.util.concurrent.Executor
 
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
-    private lateinit var binding: FragmentMapBinding
+    private var _binding: FragmentMapBinding? = null
+    private val binding get() = _binding!!
+
+    private var _bindingDialog: HeadWeatherBinding? = null
+    private val bindingDialog get() = _bindingDialog!!
+
     private lateinit var mapView: MapView
     private lateinit var map: GoogleMap
     private var markerLocation: Marker? = null
@@ -55,7 +61,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMapBinding.inflate(inflater, container, false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
         viewModel.error.observe(viewLifecycleOwner) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
         }
@@ -139,24 +145,26 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     private fun showDialogInformation(coordinates: String) {
         viewModel.initRetrofit(coordinates)
-        val bindingHead = HeadWeatherBinding.inflate(LayoutInflater.from(requireContext()))
+
+        _bindingDialog = HeadWeatherBinding.inflate(LayoutInflater.from(requireContext()))
         val dialog = Dialog(requireContext())
-        dialog.setContentView(bindingHead.root)
+        dialog.setContentView(bindingDialog.root)
         dialog.window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
-        bindingHead.headerProgressBar.visibility = View.VISIBLE
-        bindingHead.headerCloseIcon.setOnClickListener { dialog.cancel() }
+        bindingDialog.headerProgressBar.visibility = View.VISIBLE
+        bindingDialog.headerCloseIcon.setOnClickListener { dialog.cancel() }
         viewModel.currentWeather.observe(viewLifecycleOwner) {
-            bindingHead.headerProgressBar.visibility = View.GONE
-            bindingHead.headerCloseIcon.visibility = View.VISIBLE
-            bindingHead.mainFragmentIcon.setIcon(it.currently.icon)
-            bindingHead.mainFragmentTemperature.text = it.currently.temperature.convertToCelsius()
-            bindingHead.mainFragmentWeather.text = getWeatherTitle(it.currently.summary)
+            bindingDialog.headerProgressBar.visibility = View.GONE
+            bindingDialog.headerCloseIcon.visibility = View.VISIBLE
+            bindingDialog.mainFragmentIcon.setIcon(it.currently.icon)
+            bindingDialog.mainFragmentTemperature.text = it.currently.temperature.convertToCelsius()
+            bindingDialog.mainFragmentWeather.text = getWeatherTitle(it.currently.summary)
         }
         dialog.show()
         dialog.setOnCancelListener {
-            bindingHead.headerCloseIcon.visibility = View.GONE
-            bindingHead.headerProgressBar.visibility = View.GONE
+            bindingDialog.headerCloseIcon.visibility = View.GONE
+            bindingDialog.headerProgressBar.visibility = View.GONE
             viewModel.currentWeather.removeObservers(viewLifecycleOwner)
+            _bindingDialog = null
         }
     }
 
@@ -195,13 +203,18 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         binding.mapProgress.visibility = View.GONE
     }
 
-    companion object {
-        const val REQUEST_CODE = 1
-    }
-
     override fun onLocationChanged(location: Location) {
         setFocus(LatLng(location.latitude, location.longitude))
         locationManager.removeUpdates(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    companion object {
+        const val REQUEST_CODE = 1
     }
 
 }
