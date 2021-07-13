@@ -24,7 +24,7 @@ class MainRepository {
     fun initRetrofit(coordinates: String, needCache: Boolean = false) {
         this.needCache = needCache
         val mService = retrofitService
-        mService.getMovie(coordinates)
+        mService.getWeather(coordinates)
             .enqueue(object : Callback<MainModel> {
                 override fun onResponse(
                     call: Call<MainModel>,

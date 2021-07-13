@@ -10,7 +10,7 @@ import retrofit2.http.Path
 interface MainRetrofitServices {
 
     @GET("/$API_GET/$API_KEY/{coordinates}")
-    fun getMovie(
+    fun getWeather(
         @Path("coordinates") coordinates: String
     ): Call<MainModel>
 
