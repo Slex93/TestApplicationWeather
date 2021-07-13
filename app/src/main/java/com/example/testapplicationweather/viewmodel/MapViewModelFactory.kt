@@ -1,8 +1,8 @@
-package com.example.testapplicationweather.map.viewmodel
+package com.example.testapplicationweather.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.testapplicationweather.map.model.MapRepository
+import com.example.testapplicationweather.model.MapRepository
 
 class MapViewModelFactory(private val repository: MapRepository) : ViewModelProvider.Factory {
 

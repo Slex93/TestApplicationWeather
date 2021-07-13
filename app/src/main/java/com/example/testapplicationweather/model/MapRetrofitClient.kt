@@ -1,4 +1,4 @@
-package com.example.testapplicationweather.map.model.retrofit
+package com.example.testapplicationweather.model
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

@@ -1,10 +1,8 @@
-package com.example.testapplicationweather.main
+package com.example.testapplicationweather.ui.main
 
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.testapplicationweather.main.model.DailyModel
-import com.example.testapplicationweather.main.pager.PagerFragment
+import com.example.testapplicationweather.ui.pager.PagerFragment
 
 class MainAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int = 2

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.MainFragment">
+    tools:context=".ui.main.MainFragment">
 
     <include android:id="@+id/main_head_layout_include"
         layout="@layout/head_weather"

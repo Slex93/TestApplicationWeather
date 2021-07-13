@@ -1,4 +1,4 @@
-package com.example.testapplicationweather.main.pager
+package com.example.testapplicationweather.ui.pager
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

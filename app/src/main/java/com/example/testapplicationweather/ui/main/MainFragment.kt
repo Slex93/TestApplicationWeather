@@ -1,4 +1,4 @@
-package com.example.testapplicationweather.main
+package com.example.testapplicationweather.ui.main
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -11,12 +11,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
-import com.example.testapplicationweather.databinding.ActivityMainBinding
 import com.example.testapplicationweather.databinding.FragmentMainBinding
-import com.example.testapplicationweather.main.model.MainRepository
-import com.example.testapplicationweather.main.pager.PagerSharedViewModel
-import com.example.testapplicationweather.main.viewmodel.MainViewModel
-import com.example.testapplicationweather.main.viewmodel.MainViewModelFactory
+import com.example.testapplicationweather.model.MainRepository
+import com.example.testapplicationweather.ui.pager.PagerSharedViewModel
+import com.example.testapplicationweather.viewmodel.MainViewModel
+import com.example.testapplicationweather.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.*
 import com.example.testapplicationweather.utilites.Resources.internetConnection
 import com.google.android.material.snackbar.Snackbar

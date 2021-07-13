@@ -1,9 +1,7 @@
-package com.example.testapplicationweather.map.model
+package com.example.testapplicationweather.model
 
 import androidx.lifecycle.MutableLiveData
-import com.example.testapplicationweather.main.model.MainModel
-import com.example.testapplicationweather.map.model.retrofit.MapRetrofitClient
-import com.example.testapplicationweather.map.model.retrofit.MapRetrofitService
+import com.example.testapplicationweather.map.model.MapModel
 import com.example.testapplicationweather.utilites.BASE_URL
 import retrofit2.Call
 import retrofit2.Callback

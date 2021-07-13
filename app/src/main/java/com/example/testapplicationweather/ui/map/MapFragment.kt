@@ -1,4 +1,4 @@
-package com.example.testapplicationweather.map
+package com.example.testapplicationweather.ui.map
 
 import android.app.Dialog
 import android.content.Context
@@ -7,7 +7,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +14,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.testapplicationweather.R
-import com.example.testapplicationweather.databinding.FragmentMainBinding
 import com.example.testapplicationweather.databinding.FragmentMapBinding
 import com.example.testapplicationweather.databinding.HeadWeatherBinding
-import com.example.testapplicationweather.map.model.MapRepository
-import com.example.testapplicationweather.map.viewmodel.MapViewModel
-import com.example.testapplicationweather.map.viewmodel.MapViewModelFactory
+import com.example.testapplicationweather.model.MapRepository
+import com.example.testapplicationweather.viewmodel.MapViewModel
+import com.example.testapplicationweather.viewmodel.MapViewModelFactory
 import com.example.testapplicationweather.utilites.convertToCelsius
 import com.example.testapplicationweather.utilites.getCoordinates
 import com.example.testapplicationweather.utilites.getWeatherTitle
 import com.example.testapplicationweather.utilites.setIcon
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -35,7 +32,6 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
-import java.util.concurrent.Executor
 
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
 

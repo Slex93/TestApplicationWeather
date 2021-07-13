@@ -1,7 +1,7 @@
-package com.example.testapplicationweather.map.viewmodel
+package com.example.testapplicationweather.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.testapplicationweather.map.model.MapRepository
+import com.example.testapplicationweather.model.MapRepository
 
 class MapViewModel(private val repository: MapRepository) : ViewModel() {
 

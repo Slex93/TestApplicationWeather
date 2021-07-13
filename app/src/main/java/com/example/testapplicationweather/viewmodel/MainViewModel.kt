@@ -1,7 +1,7 @@
-package com.example.testapplicationweather.main.viewmodel
+package com.example.testapplicationweather.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.testapplicationweather.main.model.MainRepository
+import com.example.testapplicationweather.model.MainRepository
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
