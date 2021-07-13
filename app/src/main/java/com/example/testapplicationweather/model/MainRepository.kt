@@ -2,6 +2,8 @@ package com.example.testapplicationweather.model
 
 import androidx.lifecycle.MutableLiveData
 import com.example.testapplicationweather.main.model.MainModel
+import com.example.testapplicationweather.model.retrofit.MainRetrofitClient
+import com.example.testapplicationweather.model.retrofit.MainRetrofitServices
 import com.example.testapplicationweather.utilites.BASE_URL
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,15 +11,18 @@ import retrofit2.Response
 
 class MainRepository {
 
+    private var needCache = false
+
     private val retrofitService: MainRetrofitServices
-        get() = MainRetrofitClient.getClient(BASE_URL)
+        get() = MainRetrofitClient.getClient(BASE_URL, needCache)
             .create(MainRetrofitServices::class.java)
 
     val listOfWeather = MutableLiveData<MainModel>()
 
     val error = MutableLiveData<String>()
 
-    fun initRetrofit(coordinates: String) {
+    fun initRetrofit(coordinates: String, needCache: Boolean = false) {
+        this.needCache = needCache
         val mService = retrofitService
         mService.getMovie(coordinates)
             .enqueue(object : Callback<MainModel> {

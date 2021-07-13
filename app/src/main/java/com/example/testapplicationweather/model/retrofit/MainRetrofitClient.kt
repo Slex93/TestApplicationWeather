@@ -1,4 +1,4 @@
-package com.example.testapplicationweather.model
+package com.example.testapplicationweather.model.retrofit
 
 import com.example.testapplicationweather.utilites.Resources.cacheDirectory
 import com.example.testapplicationweather.utilites.Resources.internetConnection
@@ -15,21 +15,33 @@ import java.util.concurrent.TimeUnit
 object MainRetrofitClient {
     private var retrofit: Retrofit? = null
 
-    fun getClient(baseUrl: String): Retrofit {
+    fun getClient(baseUrl: String, needCache: Boolean = false): Retrofit {
         if (retrofit == null) {
             val cacheSize = (10 * 1024 * 1024).toLong()
             val cache = Cache(cacheDirectory, cacheSize)
             val mLoggingInterceptor = HttpLoggingInterceptor()
             mLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-            val client = OkHttpClient.Builder()
-                .addInterceptor(offlineInterceptor)
-                .addNetworkInterceptor(onlineInterceptor)
-                .addInterceptor(mLoggingInterceptor)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .cache(cache)
-                .build()
+            val client: OkHttpClient = when(needCache){
+                false -> {
+                    OkHttpClient.Builder()
+                        .addInterceptor(mLoggingInterceptor)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .cache(cache)
+                        .build()
+                }
+                else -> {
+                    OkHttpClient.Builder()
+                        .addInterceptor(offlineInterceptor)
+                        .addNetworkInterceptor(onlineInterceptor)
+                        .addInterceptor(mLoggingInterceptor)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .cache(cache)
+                        .build()
+                }
+            }
 
             retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)

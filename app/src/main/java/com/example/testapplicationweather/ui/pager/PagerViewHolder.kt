@@ -5,6 +5,7 @@ import com.example.testapplicationweather.databinding.ItemRecyclerViewBinding
 import com.example.testapplicationweather.main.model.DayModel
 import com.example.testapplicationweather.utilites.convertToCelsius
 import com.example.testapplicationweather.utilites.convertToTime
+import com.example.testapplicationweather.utilites.setIcon
 
 class PagerViewHolder(private val binding: ItemRecyclerViewBinding) :
     RecyclerView.ViewHolder(binding.root) {

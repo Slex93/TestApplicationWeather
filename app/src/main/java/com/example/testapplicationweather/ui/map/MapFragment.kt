@@ -16,13 +16,13 @@ import androidx.fragment.app.viewModels
 import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMapBinding
 import com.example.testapplicationweather.databinding.HeadWeatherBinding
-import com.example.testapplicationweather.model.MapRepository
-import com.example.testapplicationweather.viewmodel.MapViewModel
-import com.example.testapplicationweather.viewmodel.MapViewModelFactory
+import com.example.testapplicationweather.model.MainRepository
 import com.example.testapplicationweather.utilites.convertToCelsius
 import com.example.testapplicationweather.utilites.getCoordinates
 import com.example.testapplicationweather.utilites.getWeatherTitle
 import com.example.testapplicationweather.utilites.setIcon
+import com.example.testapplicationweather.viewmodel.MainViewModel
+import com.example.testapplicationweather.viewmodel.MainViewModelFactory
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -47,9 +47,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     private var markerCurrentWeather: Marker? = null
     private lateinit var locationManager: LocationManager
 
-    private val repository = MapRepository()
-    private val viewModel: MapViewModel by viewModels {
-        MapViewModelFactory(repository)
+    private val repository = MainRepository()
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModelFactory(repository)
     }
 
     override fun onCreateView(
@@ -148,7 +148,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         dialog.window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
         bindingDialog.headerProgressBar.visibility = View.VISIBLE
         bindingDialog.headerCloseIcon.setOnClickListener { dialog.cancel() }
-        viewModel.currentWeather.observe(viewLifecycleOwner) {
+        viewModel.weather.observe(viewLifecycleOwner) {
             bindingDialog.headerProgressBar.visibility = View.GONE
             bindingDialog.headerCloseIcon.visibility = View.VISIBLE
             bindingDialog.mainFragmentIcon.setIcon(it.currently.icon)
@@ -159,7 +159,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         dialog.setOnCancelListener {
             bindingDialog.headerCloseIcon.visibility = View.GONE
             bindingDialog.headerProgressBar.visibility = View.GONE
-            viewModel.currentWeather.removeObservers(viewLifecycleOwner)
+            viewModel.weather.removeObservers(viewLifecycleOwner)
             _bindingDialog = null
         }
     }
