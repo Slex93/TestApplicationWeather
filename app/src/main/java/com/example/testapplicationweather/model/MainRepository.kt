@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainRepository {
+class MainRepository : MainRepositorySource {
 
     private var needCache = false
 
@@ -21,7 +21,7 @@ class MainRepository {
 
     val error = MutableLiveData<String>()
 
-    fun initRetrofit(coordinates: String, needCache: Boolean = false) {
+    override fun initRetrofitService(coordinates: String, needCache: Boolean) {
         this.needCache = needCache
         val mService = retrofitService
         mService.getWeather(coordinates)

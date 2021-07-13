@@ -15,14 +15,14 @@ import java.util.concurrent.TimeUnit
 object MainRetrofitClient {
     private var retrofit: Retrofit? = null
 
-    fun getClient(baseUrl: String, needCache: Boolean = false): Retrofit {
+    fun getClient(baseUrl: String, needCache: Boolean): Retrofit {
         if (retrofit == null) {
             val cacheSize = (10 * 1024 * 1024).toLong()
             val cache = Cache(cacheDirectory, cacheSize)
             val mLoggingInterceptor = HttpLoggingInterceptor()
             mLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-            val client: OkHttpClient = when(needCache){
+            val client: OkHttpClient = when (needCache) {
                 false -> {
                     OkHttpClient.Builder()
                         .addInterceptor(mLoggingInterceptor)

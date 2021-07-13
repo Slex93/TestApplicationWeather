@@ -140,7 +140,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     }
 
     private fun showDialogInformation(coordinates: String) {
-        viewModel.initRetrofit(coordinates)
+        viewModel.initRetrofitService(coordinates)
 
         _bindingDialog = HeadWeatherBinding.inflate(LayoutInflater.from(requireContext()))
         val dialog = Dialog(requireContext())

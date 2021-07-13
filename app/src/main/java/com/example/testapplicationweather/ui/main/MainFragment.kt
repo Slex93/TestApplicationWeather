@@ -14,10 +14,10 @@ import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMainBinding
 import com.example.testapplicationweather.model.MainRepository
 import com.example.testapplicationweather.ui.pager.PagerSharedViewModel
-import com.example.testapplicationweather.viewmodel.MainViewModel
-import com.example.testapplicationweather.viewmodel.MainViewModelFactory
 import com.example.testapplicationweather.utilites.*
 import com.example.testapplicationweather.utilites.Resources.internetConnection
+import com.example.testapplicationweather.viewmodel.MainViewModel
+import com.example.testapplicationweather.viewmodel.MainViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -75,11 +75,11 @@ class MainFragment : Fragment() {
                 when (position) {
                     0 -> {
                         internetConnection = isNetworkConnected()
-                        mainViewModel.initRetrofit(GET_MSK)
+                        mainViewModel.initRetrofitService(GET_MSK, true)
                     }
                     1 -> {
                         internetConnection = isNetworkConnected()
-                        mainViewModel.initRetrofit(GET_SPB)
+                        mainViewModel.initRetrofitService(GET_SPB, true)
                     }
                 }
             }
