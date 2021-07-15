@@ -11,35 +11,28 @@ import retrofit2.Response
 
 class MainRepository : MainRepositorySource {
 
-    private var needCache = false
+    override val responseData = MutableLiveData<ResponseData<MainModel>>()
 
-    private val retrofitService: MainRetrofitServices
-        get() = MainRetrofitClient.getClient(BASE_URL, needCache)
+    override suspend fun getWeatherFromRetrofit(
+        coordinates: String,
+        needCache: Boolean
+    ) {
+        initServiceRetrofit(coordinates, needCache)
+    }
+
+    private fun initServiceRetrofit(location: String, needCache: Boolean) {
+        val client: MainRetrofitServices = MainRetrofitClient.getClient(BASE_URL, needCache)
             .create(MainRetrofitServices::class.java)
+        client.getWeather(location).enqueue(object : Callback<MainModel> {
+            override fun onResponse(call: Call<MainModel>, response: Response<MainModel>) {
+                val data = response.body()?.copy()
+                responseData.value = ResponseData(success = data)
+            }
 
-    override val listOfWeather = MutableLiveData<MainModel>()
+            override fun onFailure(call: Call<MainModel>, t: Throwable) {
+                responseData.value = ResponseData(failure = t.toString())
+            }
 
-    override val error = MutableLiveData<String>()
-
-    override fun initRetrofitService(coordinates: String, needCache: Boolean) {
-        this.needCache = needCache
-        val mService = retrofitService
-        mService.getWeather(coordinates)
-            .enqueue(object : Callback<MainModel> {
-                override fun onResponse(
-                    call: Call<MainModel>,
-                    response: Response<MainModel>
-                ) {
-                    if (response.isSuccessful) {
-                        listOfWeather.value = response.body()?.copy() as MainModel
-                    } else {
-                        error.value = response.message()
-                    }
-                }
-
-                override fun onFailure(call: Call<MainModel>, t: Throwable) {
-                    error.value = t.message
-                }
-            })
+        })
     }
 }

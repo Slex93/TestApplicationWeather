@@ -1,13 +1,17 @@
 package com.example.testapplicationweather.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.testapplicationweather.model.MainRepository
+import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
-    val weather = repository.listOfWeather
-    val error = repository.error
-    fun initRetrofitService(coordinates: String, needCache: Boolean = false) =
-        repository.initRetrofitService(coordinates, needCache)
+    val responseData = repository.responseData
+
+    fun getWeatherFromRetrofit(coordinates: String, needCache: Boolean = false) =
+        viewModelScope.launch {
+            repository.getWeatherFromRetrofit(coordinates, needCache)
+        }
 
 }

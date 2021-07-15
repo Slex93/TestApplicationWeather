@@ -58,9 +58,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-        viewModel.error.observe(viewLifecycleOwner) {
-            Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
-        }
         setMapView()
         return binding.root
     }
@@ -140,7 +137,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     }
 
     private fun showDialogInformation(coordinates: String) {
-        viewModel.initRetrofitService(coordinates)
+        viewModel.getWeatherFromRetrofit(coordinates)
 
         _bindingDialog = HeadWeatherBinding.inflate(LayoutInflater.from(requireContext()))
         val dialog = Dialog(requireContext())
@@ -148,18 +145,32 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         dialog.window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
         bindingDialog.headerProgressBar.visibility = View.VISIBLE
         bindingDialog.headerCloseIcon.setOnClickListener { dialog.cancel() }
-        viewModel.weather.observe(viewLifecycleOwner) {
-            bindingDialog.headerProgressBar.visibility = View.GONE
-            bindingDialog.headerCloseIcon.visibility = View.VISIBLE
-            bindingDialog.mainFragmentIcon.setIcon(it.currently.icon)
-            bindingDialog.mainFragmentTemperature.text = it.currently.temperature.convertToCelsius()
-            bindingDialog.mainFragmentWeather.text = getWeatherTitle(it.currently.summary)
+        viewModel.responseData.observe(viewLifecycleOwner) {
+            when (it.success) {
+                null -> {
+                    it.failure?.let { failure ->
+                        Snackbar.make(binding.root, failure, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+                else -> {
+                    it.success.let {
+                        bindingDialog.headerProgressBar.visibility = View.GONE
+                        bindingDialog.headerCloseIcon.visibility = View.VISIBLE
+                        bindingDialog.mainFragmentIcon.setIcon(it.currently.icon)
+                        bindingDialog.mainFragmentTemperature.text =
+                            it.currently.temperature.convertToCelsius()
+                        bindingDialog.mainFragmentWeather.text =
+                            getWeatherTitle(it.currently.summary)
+                    }
+                }
+            }
+
         }
         dialog.show()
         dialog.setOnCancelListener {
             bindingDialog.headerCloseIcon.visibility = View.GONE
             bindingDialog.headerProgressBar.visibility = View.GONE
-            viewModel.weather.removeObservers(viewLifecycleOwner)
+            viewModel.responseData.removeObservers(viewLifecycleOwner)
             _bindingDialog = null
         }
     }

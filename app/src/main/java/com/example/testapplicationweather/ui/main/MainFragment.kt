@@ -45,12 +45,9 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
-        mainViewModel.error.observe(viewLifecycleOwner) {
-            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
-        }
         binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.VISIBLE
+        initDataUpdate()
         initPager()
-        initHead()
         return binding.root
     }
 
@@ -75,27 +72,43 @@ class MainFragment : Fragment() {
                 when (position) {
                     0 -> {
                         internetConnection = isNetworkConnected()
-                        mainViewModel.initRetrofitService(GET_MSK, true)
+                        mainViewModel.getWeatherFromRetrofit(GET_MSK, true)
                     }
                     1 -> {
+                        mainViewModel.getWeatherFromRetrofit(GET_SPB, true)
                         internetConnection = isNetworkConnected()
-                        mainViewModel.initRetrofitService(GET_SPB, true)
                     }
                 }
             }
         })
     }
 
-    private fun initHead() {
-        mainViewModel.weather.observe(this.requireActivity()) {
-            val model = it.currently
-            binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
-            binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
-                model.temperature.convertToCelsius()
-            binding.mainHeadLayoutInclude.mainFragmentWeather.text = getWeatherTitle(model.summary)
-            binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
-            val listOfDays = it.daily
-            sharedViewModel.listOfDays.value = listOfDays
+    private fun initDataUpdate() {
+        mainViewModel.responseData.observe(viewLifecycleOwner) {
+            when (it.success) {
+                null -> {
+                    it.failure?.let { it1 ->
+                        Snackbar.make(
+                            binding.root,
+                            it1, Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                }
+                else -> {
+                    it.success.let {
+                        val model = it.currently
+                        binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
+                        binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
+                            model.temperature.convertToCelsius()
+                        binding.mainHeadLayoutInclude.mainFragmentWeather.text =
+                            getWeatherTitle(model.summary)
+                        binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
+                        val listOfDays = it.daily
+                        sharedViewModel.listOfDays.value = listOfDays
+                    }
+                }
+            }
+
         }
     }
 

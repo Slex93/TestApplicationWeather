@@ -44,7 +44,7 @@ fun getWeatherTitle(primaryName: String): String =
         titleClear
     } else titleCloud
 
-fun LatLng.getCoordinates():String {
+fun LatLng.getCoordinates(): String {
     val dec = DecimalFormat("#0.00000")
     val lat = dec.format(latitude).toString()
     val long = dec.format(longitude).toString()
