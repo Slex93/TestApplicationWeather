@@ -17,9 +17,9 @@ class MainRepository : MainRepositorySource {
         get() = MainRetrofitClient.getClient(BASE_URL, needCache)
             .create(MainRetrofitServices::class.java)
 
-    val listOfWeather = MutableLiveData<MainModel>()
+    override val listOfWeather = MutableLiveData<MainModel>()
 
-    val error = MutableLiveData<String>()
+    override val error = MutableLiveData<String>()
 
     override fun initRetrofitService(coordinates: String, needCache: Boolean) {
         this.needCache = needCache
@@ -32,7 +32,6 @@ class MainRepository : MainRepositorySource {
                 ) {
                     if (response.isSuccessful) {
                         listOfWeather.value = response.body()?.copy() as MainModel
-
                     } else {
                         error.value = response.message()
                     }
