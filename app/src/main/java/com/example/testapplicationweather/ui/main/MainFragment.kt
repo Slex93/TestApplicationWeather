@@ -87,23 +87,18 @@ class MainFragment : Fragment() {
         mainViewModel.responseData.observe(viewLifecycleOwner) {
             when (it.success) {
                 null -> {
-                    it.failure?.let { it1 ->
-                        Snackbar.make(
-                            binding.root,
-                            it1, Snackbar.LENGTH_LONG
-                        ).show()
-                    }
+                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_LONG).show()
                 }
                 else -> {
-                    it.success.let {
-                        val model = it.currently
+                    it.success.let { weather ->
+                        val model = weather.currently
                         binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
                         binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
                             model.temperature.convertToCelsius()
                         binding.mainHeadLayoutInclude.mainFragmentWeather.text =
                             getWeatherTitle(model.summary)
                         binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
-                        val listOfDays = it.daily
+                        val listOfDays = weather.daily
                         sharedViewModel.listOfDays.value = listOfDays
                     }
                 }

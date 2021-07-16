@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 
-object MainRetrofitClient {
+class MainRetrofitClient {
     private var retrofit: Retrofit? = null
 
     fun getClient(baseUrl: String, needCache: Boolean): Retrofit {

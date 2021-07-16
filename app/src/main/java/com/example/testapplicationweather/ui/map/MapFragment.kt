@@ -148,19 +148,17 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         viewModel.responseData.observe(viewLifecycleOwner) {
             when (it.success) {
                 null -> {
-                    it.failure?.let { failure ->
-                        Snackbar.make(binding.root, failure, Snackbar.LENGTH_SHORT).show()
-                    }
+                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_SHORT).show()
                 }
                 else -> {
-                    it.success.let {
+                    it.success.let { weather ->
                         bindingDialog.headerProgressBar.visibility = View.GONE
                         bindingDialog.headerCloseIcon.visibility = View.VISIBLE
-                        bindingDialog.mainFragmentIcon.setIcon(it.currently.icon)
+                        bindingDialog.mainFragmentIcon.setIcon(weather.currently.icon)
                         bindingDialog.mainFragmentTemperature.text =
-                            it.currently.temperature.convertToCelsius()
+                            weather.currently.temperature.convertToCelsius()
                         bindingDialog.mainFragmentWeather.text =
-                            getWeatherTitle(it.currently.summary)
+                            getWeatherTitle(weather.currently.summary)
                     }
                 }
             }
