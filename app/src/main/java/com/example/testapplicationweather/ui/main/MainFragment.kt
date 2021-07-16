@@ -85,22 +85,20 @@ class MainFragment : Fragment() {
 
     private fun initDataUpdate() {
         mainViewModel.responseData.observe(viewLifecycleOwner) {
-            when (it.success) {
-                null -> {
-                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_LONG).show()
+            when (it.failure) {
+                "" -> {
+                    val model = it.success.currently
+                    binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
+                    binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
+                        model.temperature.convertToCelsius()
+                    binding.mainHeadLayoutInclude.mainFragmentWeather.text =
+                        getWeatherTitle(model.summary)
+                    binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
+                    val listOfDays = it.success.daily
+                    sharedViewModel.listOfDays.value = listOfDays
                 }
                 else -> {
-                    it.success.let { weather ->
-                        val model = weather.currently
-                        binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
-                        binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
-                            model.temperature.convertToCelsius()
-                        binding.mainHeadLayoutInclude.mainFragmentWeather.text =
-                            getWeatherTitle(model.summary)
-                        binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
-                        val listOfDays = weather.daily
-                        sharedViewModel.listOfDays.value = listOfDays
-                    }
+                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_LONG).show()
                 }
             }
 

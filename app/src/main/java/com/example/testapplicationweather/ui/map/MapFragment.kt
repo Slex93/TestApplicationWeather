@@ -146,20 +146,18 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         bindingDialog.headerProgressBar.visibility = View.VISIBLE
         bindingDialog.headerCloseIcon.setOnClickListener { dialog.cancel() }
         viewModel.responseData.observe(viewLifecycleOwner) {
-            when (it.success) {
-                null -> {
-                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_SHORT).show()
+            when (it.failure) {
+                "" -> {
+                    bindingDialog.headerProgressBar.visibility = View.GONE
+                    bindingDialog.headerCloseIcon.visibility = View.VISIBLE
+                    bindingDialog.mainFragmentIcon.setIcon(it.success.currently.icon)
+                    bindingDialog.mainFragmentTemperature.text =
+                        it.success.currently.temperature.convertToCelsius()
+                    bindingDialog.mainFragmentWeather.text =
+                        getWeatherTitle(it.success.currently.summary)
                 }
                 else -> {
-                    it.success.let { weather ->
-                        bindingDialog.headerProgressBar.visibility = View.GONE
-                        bindingDialog.headerCloseIcon.visibility = View.VISIBLE
-                        bindingDialog.mainFragmentIcon.setIcon(weather.currently.icon)
-                        bindingDialog.mainFragmentTemperature.text =
-                            weather.currently.temperature.convertToCelsius()
-                        bindingDialog.mainFragmentWeather.text =
-                            getWeatherTitle(weather.currently.summary)
-                    }
+                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_SHORT).show()
                 }
             }
 

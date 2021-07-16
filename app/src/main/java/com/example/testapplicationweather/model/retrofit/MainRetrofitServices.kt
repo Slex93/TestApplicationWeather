@@ -1,6 +1,6 @@
 package com.example.testapplicationweather.model.retrofit
 
-import com.example.testapplicationweather.main.model.MainBase
+import com.example.testapplicationweather.main.model.MainModel
 import com.example.testapplicationweather.utilites.API_GET
 import com.example.testapplicationweather.utilites.API_KEY
 import retrofit2.Call
@@ -12,6 +12,6 @@ interface MainRetrofitServices {
     @GET("/$API_GET/$API_KEY/{coordinates}")
     fun getWeather(
         @Path("coordinates") coordinates: String
-    ): Call<MainBase>
+    ): Call<MainModel>
 
 }
