@@ -6,35 +6,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
-import com.example.testapplicationweather.data.DataSource
 import com.example.testapplicationweather.data.model.CurrentlyModel
-import com.example.testapplicationweather.data.repository.MainRepository
 import com.example.testapplicationweather.databinding.FragmentMainBinding
 import com.example.testapplicationweather.ui.pager.PagerSharedViewModel
+import com.example.testapplicationweather.ui.viewmodel.MainViewModel
 import com.example.testapplicationweather.utilites.*
 import com.example.testapplicationweather.utilites.Resources.internetConnection
-import com.example.testapplicationweather.ui.viewmodel.MainViewModel
-import com.example.testapplicationweather.ui.viewmodel.MainViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.Dispatchers
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewPager: ViewPager2
 
-    private val ioDispatcher = Dispatchers.IO
-    private val dataSource = DataSource(ioDispatcher)
-    private val repository = MainRepository(dataSource, ioDispatcher)
     private val mainViewModel: MainViewModel by viewModels {
-        MainViewModelFactory(repository)
+        viewModelFactory
     }
 
     private val sharedViewModel: PagerSharedViewModel by activityViewModels()

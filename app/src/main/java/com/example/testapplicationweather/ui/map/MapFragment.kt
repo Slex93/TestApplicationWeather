@@ -11,19 +11,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.testapplicationweather.R
-import com.example.testapplicationweather.data.DataSource
-import com.example.testapplicationweather.data.repository.MainRepository
 import com.example.testapplicationweather.databinding.FragmentMapBinding
 import com.example.testapplicationweather.databinding.HeadWeatherBinding
-import com.example.testapplicationweather.utilites.convertToCelsius
-import com.example.testapplicationweather.utilites.getCoordinates
-import com.example.testapplicationweather.utilites.getWeatherTitle
-import com.example.testapplicationweather.utilites.setIcon
 import com.example.testapplicationweather.ui.viewmodel.MainViewModel
-import com.example.testapplicationweather.ui.viewmodel.MainViewModelFactory
+import com.example.testapplicationweather.utilites.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -31,10 +24,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.coroutines.Dispatchers
 import java.util.*
 
-class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
+class MapFragment : BaseFragment(), OnMapReadyCallback, LocationListener {
 
     private var _binding: FragmentMapBinding? = null
     private val binding get() = _binding!!
@@ -48,11 +40,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     private var markerCurrentWeather: Marker? = null
     private lateinit var locationManager: LocationManager
 
-    private val ioDispatcher = Dispatchers.IO
-    private val dataSource = DataSource(ioDispatcher)
-    private val repository = MainRepository(dataSource, ioDispatcher)
     private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(repository)
+        viewModelFactory
     }
 
     override fun onCreateView(
