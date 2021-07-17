@@ -1,4 +1,4 @@
-package com.example.testapplicationweather.model.retrofit
+package com.example.testapplicationweather.data.retrofit
 
 import com.example.testapplicationweather.utilites.Resources.cacheDirectory
 import com.example.testapplicationweather.utilites.Resources.internetConnection

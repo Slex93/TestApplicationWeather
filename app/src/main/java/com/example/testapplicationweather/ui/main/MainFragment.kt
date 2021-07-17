@@ -11,16 +11,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
+import com.example.testapplicationweather.data.DataSource
+import com.example.testapplicationweather.data.model.CurrentlyModel
+import com.example.testapplicationweather.data.repository.MainRepository
 import com.example.testapplicationweather.databinding.FragmentMainBinding
-import com.example.testapplicationweather.main.model.CurrentlyModel
-import com.example.testapplicationweather.model.MainRepository
 import com.example.testapplicationweather.ui.pager.PagerSharedViewModel
 import com.example.testapplicationweather.utilites.*
 import com.example.testapplicationweather.utilites.Resources.internetConnection
-import com.example.testapplicationweather.viewmodel.MainViewModel
-import com.example.testapplicationweather.viewmodel.MainViewModelFactory
-import com.google.android.material.snackbar.Snackbar
+import com.example.testapplicationweather.ui.viewmodel.MainViewModel
+import com.example.testapplicationweather.ui.viewmodel.MainViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
 
 class MainFragment : Fragment() {
 
@@ -28,7 +29,10 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewPager: ViewPager2
-    private val repository = MainRepository()
+
+    private val ioDispatcher = Dispatchers.IO
+    private val dataSource = DataSource(ioDispatcher)
+    private val repository = MainRepository(dataSource, ioDispatcher)
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
     }
@@ -88,17 +92,11 @@ class MainFragment : Fragment() {
     }
 
     private fun initDataUpdate() {
-        mainViewModel.responseData.observe(viewLifecycleOwner) {
-            when (it.failure) {
-                "" -> {
-                    it.success.currently.bindUI()
-                    sharedViewModel.listOfDays.value = it.success.daily
-                }
-                else -> {
-                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_LONG).show()
-                }
+        mainViewModel.weather.observe(viewLifecycleOwner) {
+            it?.let {
+                it.currently.bindUI()
+                sharedViewModel.listOfDays.value = it.daily
             }
-
         }
     }
 

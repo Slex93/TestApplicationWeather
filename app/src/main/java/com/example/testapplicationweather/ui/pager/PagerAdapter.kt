@@ -3,8 +3,8 @@ package com.example.testapplicationweather.ui.pager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testapplicationweather.data.model.DayModel
 import com.example.testapplicationweather.databinding.ItemRecyclerViewBinding
-import com.example.testapplicationweather.main.model.DayModel
 
 class PagerAdapter : RecyclerView.Adapter<PagerViewHolder>() {
 

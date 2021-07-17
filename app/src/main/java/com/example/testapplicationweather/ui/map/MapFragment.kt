@@ -14,15 +14,16 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.testapplicationweather.R
+import com.example.testapplicationweather.data.DataSource
+import com.example.testapplicationweather.data.repository.MainRepository
 import com.example.testapplicationweather.databinding.FragmentMapBinding
 import com.example.testapplicationweather.databinding.HeadWeatherBinding
-import com.example.testapplicationweather.model.MainRepository
 import com.example.testapplicationweather.utilites.convertToCelsius
 import com.example.testapplicationweather.utilites.getCoordinates
 import com.example.testapplicationweather.utilites.getWeatherTitle
 import com.example.testapplicationweather.utilites.setIcon
-import com.example.testapplicationweather.viewmodel.MainViewModel
-import com.example.testapplicationweather.viewmodel.MainViewModelFactory
+import com.example.testapplicationweather.ui.viewmodel.MainViewModel
+import com.example.testapplicationweather.ui.viewmodel.MainViewModelFactory
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -30,7 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
 import java.util.*
 
 class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
@@ -47,7 +48,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
     private var markerCurrentWeather: Marker? = null
     private lateinit var locationManager: LocationManager
 
-    private val repository = MainRepository()
+    private val ioDispatcher = Dispatchers.IO
+    private val dataSource = DataSource(ioDispatcher)
+    private val repository = MainRepository(dataSource, ioDispatcher)
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory(repository)
     }
@@ -145,28 +148,23 @@ class MapFragment : Fragment(), OnMapReadyCallback, LocationListener {
         dialog.window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
         bindingDialog.headerProgressBar.visibility = View.VISIBLE
         bindingDialog.headerCloseIcon.setOnClickListener { dialog.cancel() }
-        viewModel.responseData.observe(viewLifecycleOwner) {
-            when (it.failure) {
-                "" -> {
-                    bindingDialog.headerProgressBar.visibility = View.GONE
-                    bindingDialog.headerCloseIcon.visibility = View.VISIBLE
-                    bindingDialog.mainFragmentIcon.setIcon(it.success.currently.icon)
-                    bindingDialog.mainFragmentTemperature.text =
-                        it.success.currently.temperature.convertToCelsius()
-                    bindingDialog.mainFragmentWeather.text =
-                        getWeatherTitle(it.success.currently.summary)
-                }
-                else -> {
-                    Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_SHORT).show()
-                }
+        viewModel.weather.observe(viewLifecycleOwner) {
+            it?.let {
+                bindingDialog.headerProgressBar.visibility = View.GONE
+                bindingDialog.headerCloseIcon.visibility = View.VISIBLE
+                bindingDialog.mainFragmentIcon.setIcon(it.currently.icon)
+                bindingDialog.mainFragmentTemperature.text =
+                    it.currently.temperature.convertToCelsius()
+                bindingDialog.mainFragmentWeather.text =
+                    getWeatherTitle(it.currently.summary)
             }
-
         }
+
         dialog.show()
         dialog.setOnCancelListener {
             bindingDialog.headerCloseIcon.visibility = View.GONE
             bindingDialog.headerProgressBar.visibility = View.GONE
-            viewModel.responseData.removeObservers(viewLifecycleOwner)
+            viewModel.weather.removeObservers(viewLifecycleOwner)
             _bindingDialog = null
         }
     }

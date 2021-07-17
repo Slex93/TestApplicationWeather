@@ -1,8 +1,8 @@
 package com.example.testapplicationweather.ui.pager
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testapplicationweather.data.model.DayModel
 import com.example.testapplicationweather.databinding.ItemRecyclerViewBinding
-import com.example.testapplicationweather.main.model.DayModel
 import com.example.testapplicationweather.utilites.convertToCelsius
 import com.example.testapplicationweather.utilites.convertToTime
 import com.example.testapplicationweather.utilites.setIcon
