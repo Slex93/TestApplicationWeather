@@ -11,14 +11,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
 class MainRetrofitClient {
     private var retrofit: Retrofit? = null
 
     fun getClient(baseUrl: String, needCache: Boolean): Retrofit {
         if (retrofit == null) {
-            val cacheSize = (10 * 1024 * 1024).toLong()
-            val cache = Cache(cacheDirectory, cacheSize)
+
             val mLoggingInterceptor = HttpLoggingInterceptor()
             mLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -28,10 +26,12 @@ class MainRetrofitClient {
                         .addInterceptor(mLoggingInterceptor)
                         .readTimeout(30, TimeUnit.SECONDS)
                         .connectTimeout(30, TimeUnit.SECONDS)
-                        .cache(cache)
                         .build()
                 }
                 else -> {
+                    val cacheSize = (10 * 1024 * 1024).toLong()
+                    val cache = Cache(cacheDirectory, cacheSize)
+
                     OkHttpClient.Builder()
                         .addInterceptor(offlineInterceptor)
                         .addNetworkInterceptor(onlineInterceptor)
@@ -72,6 +72,5 @@ class MainRetrofitClient {
         }
         chain.proceed(request)
     }
-
 
 }

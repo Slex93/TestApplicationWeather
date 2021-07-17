@@ -11,9 +11,9 @@ class PagerViewHolder(private val binding: ItemRecyclerViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(day: DayModel) {
-        val temperatureHigh = day.temperatureHigh.toFloat()
-        val temperatureLow = day.temperatureLow.toFloat()
-        val temperature = ((temperatureHigh + temperatureLow) / 2).toString()
+        val temperature = day.run {
+            (temperatureHigh.toFloat() + temperatureLow.toFloat()) / 2
+        }.toString()
         binding.itemRecyclerIcon.setIcon(day.icon)
         binding.itemRecyclerDate.text = day.time.convertToTime()
         binding.itemRecyclerTemperature.text = temperature.convertToCelsius()

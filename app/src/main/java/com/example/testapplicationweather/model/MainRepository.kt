@@ -13,6 +13,10 @@ class MainRepository : MainRepositorySource {
 
     override val responseData = MutableLiveData<ResponseModel>()
 
+    private var needCache = false
+    private val client: MainRetrofitServices = MainRetrofitClient().getClient(BASE_URL, needCache)
+        .create(MainRetrofitServices::class.java)
+
     override suspend fun getWeatherFromRetrofit(
         coordinates: String,
         needCache: Boolean
@@ -21,21 +25,18 @@ class MainRepository : MainRepositorySource {
     }
 
     private fun initServiceRetrofit(location: String, needCache: Boolean) {
-
-        val client: MainRetrofitServices = MainRetrofitClient().getClient(BASE_URL, needCache)
-            .create(MainRetrofitServices::class.java)
-
+        this.needCache = needCache
         client.getWeather(location).enqueue(object : Callback<MainModel> {
             override fun onResponse(call: Call<MainModel>, response: Response<MainModel>) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        responseData.value = ResponseModel(success = it.copy())
+                        responseData.value = ResponseModel(success = it)
                     }
                 }
             }
 
             override fun onFailure(call: Call<MainModel>, t: Throwable) {
-                responseData.value = ResponseModel(failure = t.toString())
+                responseData.value = ResponseModel(failure = t.message.toString())
             }
 
         })

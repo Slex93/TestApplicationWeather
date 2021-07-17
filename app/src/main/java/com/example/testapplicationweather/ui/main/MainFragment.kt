@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.testapplicationweather.R
 import com.example.testapplicationweather.databinding.FragmentMainBinding
+import com.example.testapplicationweather.main.model.CurrentlyModel
 import com.example.testapplicationweather.model.MainRepository
 import com.example.testapplicationweather.ui.pager.PagerSharedViewModel
 import com.example.testapplicationweather.utilites.*
@@ -71,31 +72,27 @@ class MainFragment : Fragment() {
                 super.onPageSelected(position)
                 when (position) {
                     0 -> {
-                        internetConnection = isNetworkConnected()
-                        mainViewModel.getWeatherFromRetrofit(GET_MSK, true)
+                        GET_MSK.getWeather()
                     }
                     1 -> {
-                        mainViewModel.getWeatherFromRetrofit(GET_SPB, true)
-                        internetConnection = isNetworkConnected()
+                        GET_SPB.getWeather()
                     }
                 }
             }
         })
     }
 
+    private fun String.getWeather() {
+        internetConnection = isNetworkConnected()
+        mainViewModel.getWeatherFromRetrofit(this, true)
+    }
+
     private fun initDataUpdate() {
         mainViewModel.responseData.observe(viewLifecycleOwner) {
             when (it.failure) {
                 "" -> {
-                    val model = it.success.currently
-                    binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
-                    binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
-                        model.temperature.convertToCelsius()
-                    binding.mainHeadLayoutInclude.mainFragmentWeather.text =
-                        getWeatherTitle(model.summary)
-                    binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(model.icon)
-                    val listOfDays = it.success.daily
-                    sharedViewModel.listOfDays.value = listOfDays
+                    it.success.currently.bindUI()
+                    sharedViewModel.listOfDays.value = it.success.daily
                 }
                 else -> {
                     Snackbar.make(binding.root, it.failure, Snackbar.LENGTH_LONG).show()
@@ -112,9 +109,20 @@ class MainFragment : Fragment() {
         return activeNetwork?.isConnected == true
     }
 
+    private fun CurrentlyModel.bindUI() {
+        binding.mainHeadLayoutInclude.headerProgressBar.visibility = View.GONE
+        binding.mainHeadLayoutInclude.mainFragmentTemperature.text =
+            this.temperature.convertToCelsius()
+        binding.mainHeadLayoutInclude.mainFragmentWeather.text =
+            getWeatherTitle(this.summary)
+        binding.mainHeadLayoutInclude.mainFragmentIcon.setIcon(this.icon)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 }
+
+
 
