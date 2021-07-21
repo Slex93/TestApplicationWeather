@@ -5,18 +5,17 @@ import com.example.testapplicationweather.data.retrofit.MainRetrofitClient
 import com.example.testapplicationweather.data.retrofit.MainRetrofitServices
 import com.example.testapplicationweather.utilites.BASE_URL
 import com.example.testapplicationweather.utilites.Result
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class DataSource(
-    private val ioDispatcher: CoroutineDispatcher
-) {
+class DataSource {
 
     suspend fun getResult(coordinates: String, needCache: Boolean): Result<WeatherRemoteModel> =
-        withContext(ioDispatcher) {
+        withContext(Dispatchers.IO) {
             return@withContext try {
-                val client: MainRetrofitServices = MainRetrofitClient().getClient(BASE_URL, needCache)
-                    .create(MainRetrofitServices::class.java)
+                val client: MainRetrofitServices =
+                    MainRetrofitClient().getClient(BASE_URL, needCache)
+                        .create(MainRetrofitServices::class.java)
                 val result = client.getWeather(coordinates)
                 if (result.isSuccessful) {
                     val data = result.body()
