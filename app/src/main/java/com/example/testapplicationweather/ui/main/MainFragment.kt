@@ -87,7 +87,7 @@ class MainFragment : BaseFragment() {
         mainViewModel.weather.observe(viewLifecycleOwner) {
             it?.let {
                 it.currently.bindUI()
-                sharedViewModel.listOfDays.value = it.daily
+                sharedViewModel.setValue(it.daily)
             }
         }
     }

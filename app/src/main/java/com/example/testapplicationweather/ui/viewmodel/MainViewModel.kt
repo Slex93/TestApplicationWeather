@@ -1,5 +1,6 @@
 package com.example.testapplicationweather.ui.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,27 +11,37 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
-    val isLoading = MutableLiveData<Boolean>()
+    private val _isLoading = MutableLiveData<Boolean>()
+    private fun setLoading(loading: Boolean) {
+        _isLoading.value = loading
+    }
 
-    val weather = MutableLiveData<WeatherModel?>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
+    private var _weather = MutableLiveData<WeatherModel?>()
+    private fun setWeather(weather: WeatherModel?) {
+        _weather.value = weather
+    }
+
+    val weather: LiveData<WeatherModel?> get() = _weather
 
     fun getWeatherFromRetrofit(coordinates: String, needCache: Boolean = false) {
-        isLoading.value = true
+        _isLoading.value = true
         viewModelScope.launch {
             when (val result = repository.getWeatherFromRetrofit(coordinates, needCache)) {
                 is Result.Success -> {
-                    isLoading.value = false
+                    setLoading(false)
                     if (result.data != null) {
-                        weather.value = result.data
+                        setWeather(result.data)
                     } else {
-                        weather.postValue(null)
+                        setWeather(null)
                     }
                 }
                 is Result.Failure -> {
-                    isLoading.value = false
+                    setLoading(false)
                 }
                 is Result.Loading -> {
-                    isLoading.postValue(true)
+                    setLoading(true)
                 }
             }
 
