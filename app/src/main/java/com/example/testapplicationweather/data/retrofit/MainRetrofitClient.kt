@@ -20,28 +20,14 @@ class MainRetrofitClient {
             val mLoggingInterceptor = HttpLoggingInterceptor()
             mLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-            val client: OkHttpClient = when (needCache) {
-                false -> {
-                    OkHttpClient.Builder()
-                        .addInterceptor(mLoggingInterceptor)
-                        .readTimeout(30, TimeUnit.SECONDS)
-                        .connectTimeout(30, TimeUnit.SECONDS)
-                        .build()
-                }
-                else -> {
-                    val cacheSize = (10 * 1024 * 1024).toLong()
-                    val cache = Cache(cacheDirectory, cacheSize)
+            val clientBuilder = OkHttpClient.Builder()
+                .addInterceptor(mLoggingInterceptor)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
 
-                    OkHttpClient.Builder()
-                        .addInterceptor(offlineInterceptor)
-                        .addNetworkInterceptor(onlineInterceptor)
-                        .addInterceptor(mLoggingInterceptor)
-                        .readTimeout(30, TimeUnit.SECONDS)
-                        .connectTimeout(30, TimeUnit.SECONDS)
-                        .cache(cache)
-                        .build()
-                }
-            }
+            if (needCache) clientBuilder.addCache(20)
+
+            val client = clientBuilder.build()
 
             retrofit = Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -51,6 +37,11 @@ class MainRetrofitClient {
         }
         return retrofit!!
     }
+
+    private fun OkHttpClient.Builder.addCache(cache: Long): OkHttpClient.Builder = this
+        .addInterceptor(offlineInterceptor)
+        .addNetworkInterceptor(onlineInterceptor)
+        .cache(Cache(cacheDirectory, cache * 1024 * 1024))
 
     private var onlineInterceptor = Interceptor { chain ->
         val response = chain.proceed(chain.request())
@@ -72,5 +63,6 @@ class MainRetrofitClient {
         }
         chain.proceed(request)
     }
-
 }
+
+
